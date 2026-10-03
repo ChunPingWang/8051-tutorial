@@ -1,5 +1,7 @@
 # N76E003(8051)初學者教學手冊 ─ 組合語言 × C 語言對照
 
+[![build-and-test](https://github.com/ChunPingWang/8051-tutorial/actions/workflows/ci.yml/badge.svg)](https://github.com/ChunPingWang/8051-tutorial/actions/workflows/ci.yml)
+
 這是一套給**完全初學者**的 8051 微控制器實作教材,使用新唐(Nuvoton)**N76E003** 開發板,
 在 **Linux** 上以開源工具鏈(SDCC + nuvoprog)從頭學起。
 
@@ -15,6 +17,7 @@
 ```
 8051-tutorial/
 ├── README.md            ← 你正在看的檔案
+├── Makefile             ← 頂層:make / make test / make clean(一次操作全部)
 ├── docs/                ← 教學文件(先讀這裡的概念,再看範例)
 │   ├── 00-環境建置與燒錄.md     安裝工具、學會把程式燒進晶片
 │   ├── 01-認識N76E003與8051.md  架構、記憶體、SFR 等基礎觀念
@@ -23,6 +26,7 @@
 │   ├── 04-計時器與中斷.md        對應第 3 課
 │   ├── 05-UART序列埠.md          對應第 4 課
 │   ├── 06-ADC類比輸入.md         對應第 5 課
+│   ├── 07-開發與測試流程.md      完整開發流程、除錯、測試、CI
 │   └── 99-組語與C對照速查.md     指令/語法對照表
 │
 ├── include/
@@ -30,6 +34,13 @@
 │
 ├── common/
 │   └── 99-nuvoton-nulink.rules  ← Linux 存取燒錄器需要的 udev 規則
+│
+├── tools/               ← 開發與測試工具
+│   ├── build_all.sh           回歸測試:一次編譯所有範例
+│   └── host_test/             主機端單元測試(在 PC 上用 gcc 測純邏輯)
+│
+├── .github/workflows/
+│   └── ci.yml           ← 持續整合:每次 push 自動編譯 + 測試
 │
 ├── c/                   ← C 語言範例(每課一個資料夾)
 │   ├── common.mk              共用的編譯設定
@@ -52,6 +63,8 @@
    - 先讀對應的 `docs/` 章節(了解原理)
    - 再做 `c/` 版本(好懂、快速看到成果)
    - 最後對照 `asm/` 版本(理解底層如何運作)
+4. 想更有紀律地開發,讀 [`docs/07-開發與測試流程.md`](docs/07-開發與測試流程.md)
+   (編譯 → 測試 → 燒錄 → 除錯 → 版本控制的完整循環)。
 
 | 課程 | 主題 | 學到的核心能力 |
 |------|------|----------------|
@@ -78,6 +91,27 @@ make flash
 
 工具安裝、燒錄器接線、udev 權限設定等細節,請看
 [`docs/00-環境建置與燒錄.md`](docs/00-環境建置與燒錄.md)。
+
+---
+
+## 🧪 開發與測試流程
+
+本教材不只教「寫程式」,也示範一套**完整的開發與測試流程**(詳見
+[`docs/07-開發與測試流程.md`](docs/07-開發與測試流程.md)):
+
+```bash
+# 在專案根目錄
+make          # 編譯全部 10 個範例(C + 組語),確認都建置得起來
+make test     # 回歸測試:主機端單元測試 + 編譯所有範例
+make clean    # 清掉所有編譯產物
+```
+
+- **主機端單元測試**:把「不碰硬體的純邏輯」(如數字轉字串、ADC 換算電壓)抽到
+  [`tools/host_test/`](tools/host_test/),用電腦的 `gcc` + `assert` 秒速驗證,不必每次都燒板子。
+- **回歸測試**:[`tools/build_all.sh`](tools/build_all.sh) 一次編譯所有範例,改到共用檔時確認沒弄壞任何一課。
+- **持續整合 (CI)**:每次 `git push`,GitHub Actions 會自動跑 `make test`(見上方徽章)。
+
+完整流程:`寫程式 → make → make test → make flash → 實機測試 → 除錯 → git commit/push`。
 
 ---
 
