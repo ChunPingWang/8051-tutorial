@@ -1,0 +1,22 @@
+# ---- 編譯 / 連結產生的中間檔與輸出 ----
+*.ihx
+*.hex
+*.rel
+*.map
+*.mem
+*.lst
+*.sym
+*.rst
+*.lk
+*.adb
+*.cdb
+*.dump
+# SDCC 用 -S 產生的中間組語(C 專案)
+*_gen.asm
+
+# ---- 編輯器 / 系統 ----
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store

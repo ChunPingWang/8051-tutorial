@@ -1,0 +1,24 @@
+# ============================================================================
+#  Nuvoton Nu-Link 燒錄器 udev 規則
+# ----------------------------------------------------------------------------
+#  目的:讓「一般使用者」不必 sudo 就能存取 Nu-Link 燒錄器,
+#        否則 nuvoprog 會出現 "hidapi: failed to open device" 權限錯誤。
+#
+#  安裝方式(需要系統管理員權限,只需做一次):
+#      sudo cp 99-nuvoton-nulink.rules /etc/udev/rules.d/
+#      sudo udevadm control --reload-rules
+#      sudo udevadm trigger
+#  然後把 Nu-Link 的 USB 線「拔掉再插上」讓新規則生效。
+#
+#  涵蓋的裝置:
+#      0416:511c  Nu-Link1 ICE(本教材使用)
+#      0416:5200  Nu-Link2(如果你用的是第二代)
+# ============================================================================
+
+# Nu-Link1 ICE
+SUBSYSTEM=="usb", ATTRS{idVendor}=="0416", ATTRS{idProduct}=="511c", MODE="0666", TAG+="uaccess"
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="0416", ATTRS{idProduct}=="511c", MODE="0666", TAG+="uaccess"
+
+# Nu-Link2(保險起見一併加入)
+SUBSYSTEM=="usb", ATTRS{idVendor}=="0416", ATTRS{idProduct}=="5200", MODE="0666", TAG+="uaccess"
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="0416", ATTRS{idProduct}=="5200", MODE="0666", TAG+="uaccess"
