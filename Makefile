@@ -8,8 +8,8 @@
 #  個別一課的編譯/燒錄,請進到該課資料夾下 make / make flash(見各課 README)。
 # ============================================================================
 
-LESSONS := c/01-blink c/02-button c/03-timer c/04-uart c/05-adc \
-           asm/01-blink asm/02-button asm/03-timer asm/04-uart asm/05-adc
+LESSONS := c/01-blink c/02-button c/03-timer c/04-uart c/05-adc c/06-pwm \
+           asm/01-blink asm/02-button asm/03-timer asm/04-uart asm/05-adc asm/06-pwm
 
 all:
 	@for d in $(LESSONS); do \

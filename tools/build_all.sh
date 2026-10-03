@@ -12,8 +12,8 @@ set -u
 cd "$(dirname "$0")/.." || exit 1
 
 LESSONS="
-c/01-blink c/02-button c/03-timer c/04-uart c/05-adc
-asm/01-blink asm/02-button asm/03-timer asm/04-uart asm/05-adc
+c/01-blink c/02-button c/03-timer c/04-uart c/05-adc c/06-pwm
+asm/01-blink asm/02-button asm/03-timer asm/04-uart asm/05-adc asm/06-pwm
 "
 
 pass=0
@@ -31,6 +31,19 @@ for d in $LESSONS; do
         fail=$((fail + 1))
     fi
     make -C "$d" clean >/dev/null 2>&1
+done
+
+# 進階範例:需用 TARGET 指定的額外原始碼(第 6 課的正弦馬達)
+for d in c/06-pwm asm/06-pwm; do
+    make -C "$d" TARGET=motor_sine clean >/dev/null 2>&1
+    if make -C "$d" TARGET=motor_sine >/dev/null 2>&1 && [ -f "$d/motor_sine.hex" ]; then
+        printf "  \033[32m[ OK ]\033[0m  %s (motor_sine)\n" "$d"
+        pass=$((pass + 1))
+    else
+        printf "  \033[31m[FAIL]\033[0m  %s (motor_sine)\n" "$d"
+        fail=$((fail + 1))
+    fi
+    make -C "$d" TARGET=motor_sine clean >/dev/null 2>&1
 done
 
 echo "-----------------------------------------"
