@@ -12,7 +12,7 @@ set -u
 cd "$(dirname "$0")/.." || exit 1
 
 LESSONS="
-c/01-blink c/02-button c/03-timer c/04-uart c/05-adc c/06-pwm
+c/01-blink c/02-button c/03-timer c/04-uart c/05-adc c/06-pwm c/07-fsm
 asm/01-blink asm/02-button asm/03-timer asm/04-uart asm/05-adc asm/06-pwm
 "
 

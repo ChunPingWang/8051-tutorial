@@ -14,6 +14,11 @@
 # SDCC 用 -S 產生的中間組語(C 專案)
 *_gen.asm
 
+# ---- 主機端(PC)編譯出來的執行檔 ----
+tools/host_test/test_logic
+tools/host_test/test_fsm
+tools/fsm_sim/fsm_sim
+
 # ---- 編輯器 / 系統 ----
 .vscode/
 .idea/

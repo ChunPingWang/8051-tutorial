@@ -18,8 +18,12 @@ NUVOPROG ?= nuvoprog
 # ---- 路徑與目標 ----
 # INCDIR:共用的 N76E003.h 放的位置
 INCDIR  ?= ../../include
-# TARGET:原始碼檔名(不含副檔名),預設 main → main.c
+# TARGET:主原始碼檔名(不含副檔名),預設 main → main.c
 TARGET  ?= main
+# EXTRA_SRCS:除了主檔以外、要一起編譯並連結的 .c 檔(多檔專案用,如第 7 課的 fsm.c)
+#   各課 Makefile 只要在 include 之前寫:  EXTRA_SRCS = fsm.c
+EXTRA_SRCS ?=
+EXTRA_RELS := $(EXTRA_SRCS:.c=.rel)
 
 # ---- N76E003 的編譯參數 ----
 #   -mmcs51        : 目標是 8051 架構
@@ -32,9 +36,14 @@ MCUFLAGS ?= -mmcs51 --model-small --code-size 18432 --xram-size 768 --iram-size 
 # ---------------------------------------------------------------------------
 all: $(TARGET).hex
 
-# C 原始碼 → .ihx (SDCC 的 Intel HEX 格式)
-$(TARGET).ihx: $(TARGET).c
-	$(SDCC) $(MCUFLAGS) -I$(INCDIR) $(TARGET).c -o $(TARGET).ihx
+# 其他 .c 檔 → .rel(只編譯不連結,-c 就是這個意思)
+%.rel: %.c
+	$(SDCC) -c $(MCUFLAGS) -I$(INCDIR) $< -o $@
+
+# 主原始碼 + 其他 .rel → .ihx (SDCC 的 Intel HEX 格式)
+#   單檔的課(第 1~6 課)EXTRA_RELS 是空的,這行就等同於原來的單檔編譯。
+$(TARGET).ihx: $(TARGET).c $(EXTRA_RELS)
+	$(SDCC) $(MCUFLAGS) -I$(INCDIR) $(TARGET).c $(EXTRA_RELS) -o $(TARGET).ihx
 
 # .ihx → 標準 .hex (用 packihx 整理成燒錄工具吃的格式)
 $(TARGET).hex: $(TARGET).ihx
