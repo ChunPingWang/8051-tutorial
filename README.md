@@ -1,6 +1,10 @@
 # N76E003(8051)初學者教學手冊 ─ 組合語言 × C 語言對照
 
-[![build-and-test](https://github.com/ChunPingWang/8051-tutorial/actions/workflows/ci.yml/badge.svg)](https://github.com/ChunPingWang/8051-tutorial/actions/workflows/ci.yml)
+![platform](https://img.shields.io/badge/platform-Linux-informational)
+![MCU](https://img.shields.io/badge/MCU-Nuvoton%20N76E003%20(8051)-blue)
+![code](https://img.shields.io/badge/code-C%20%26%20Assembly-success)
+![toolchain](https://img.shields.io/badge/toolchain-SDCC%20%2B%20nuvoprog-orange)
+![license](https://img.shields.io/badge/license-MIT-lightgrey)
 
 這是一套給**完全初學者**的 8051 微控制器實作教材,使用新唐(Nuvoton)**N76E003** 開發板,
 在 **Linux** 上以開源工具鏈(SDCC + nuvoprog)從頭學起。
@@ -41,9 +45,6 @@
 ├── tools/               ← 開發與測試工具
 │   ├── build_all.sh           回歸測試:一次編譯所有範例
 │   └── host_test/             主機端單元測試(在 PC 上用 gcc 測純邏輯)
-│
-├── .github/workflows/
-│   └── ci.yml           ← 持續整合:每次 push 自動編譯 + 測試
 │
 ├── c/                   ← C 語言範例(每課一個資料夾)
 │   ├── common.mk              共用的編譯設定
@@ -115,7 +116,8 @@ make clean    # 清掉所有編譯產物
 - **主機端單元測試**:把「不碰硬體的純邏輯」(如數字轉字串、ADC 換算電壓)抽到
   [`tools/host_test/`](tools/host_test/),用電腦的 `gcc` + `assert` 秒速驗證,不必每次都燒板子。
 - **回歸測試**:[`tools/build_all.sh`](tools/build_all.sh) 一次編譯所有範例,改到共用檔時確認沒弄壞任何一課。
-- **持續整合 (CI)**:每次 `git push`,GitHub Actions 會自動跑 `make test`(見上方徽章)。
+- **提交前自測**:`git push` 前先在本機跑一次 `make test`,確保所有範例仍能建置、
+  單元測試通過,再提交(可選:設一個 git pre-commit hook 自動執行,見 docs/07)。
 
 完整流程:`寫程式 → make → make test → make flash → 實機測試 → 除錯 → git commit/push`。
 

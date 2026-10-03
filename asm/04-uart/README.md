@@ -6,8 +6,8 @@
 ## 接線
 需要一個 USB-TTL 轉接器:
 ```
-N76E003 P0.6 (TXD) ──► USB-TTL 的 RX
-N76E003 GND        ──► USB-TTL 的 GND
+N76E003 P0.6 (TXD) --> USB-TTL 的 RX
+N76E003 GND        --> USB-TTL 的 GND
 ```
 - 本課只示範「送」,RXD 可先不接。
 - 序列埠參數:**9600 8N1**。
