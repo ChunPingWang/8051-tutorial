@@ -40,8 +40,11 @@ $(TARGET).hex: $(TARGET).ihx
 	$(PACKIHX) $(TARGET).ihx > $(TARGET).hex
 
 # 燒錄到開發板
+#   N76E003 燒錄時一定要指定「設定位元組 (config)」,否則 nuvoprog 會拒絕。
+#   CONFIG=FFFFFFFF 是出廠預設:從 APROM 開機、不啟用任何保護鎖。
+CONFIG ?= FFFFFFFF
 flash: $(TARGET).hex
-	$(NUVOPROG) program -t n76e003 -a $(TARGET).hex
+	$(NUVOPROG) program -t n76e003 -c $(CONFIG) -a $(TARGET).hex
 
 clean:
 	rm -f *.ihx *.hex *.rel *.map *.lst *.sym *.rst *.lk
